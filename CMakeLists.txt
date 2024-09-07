@@ -19,6 +19,7 @@ picosystem_executable(
 target_link_libraries(
   loader
   pico_stdlib
+  pico_rand
 )
 
 disable_startup_logo(loader)
