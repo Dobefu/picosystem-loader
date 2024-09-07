@@ -1,0 +1,6 @@
+[submodule "picosystem"]
+	path = picosystem
+	url = https://github.com/pimoroni/picosystem.git
+[submodule "games/picosystem-tetris"]
+	path = games/picosystem-tetris
+	url = https://github.com/Dobefu/picosystem-tetris
