@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <queue>
 #include <stack>
@@ -13,6 +14,8 @@ namespace Tetris
 {
 #include "games/picosystem-tetris/tetris.cpp"
 }
+
+char battery_level;
 
 uint8_t volume = 100;
 
@@ -83,6 +86,45 @@ void splash()
   free(logo);
 }
 
+void init_games()
+{
+  target(card);
+
+  for (char j = 0; j <= 8; j++)
+  {
+    pen(2 + j, 8, 2 + j);
+
+    if (j == 8)
+    {
+      pen(11, 12, 15);
+    }
+
+    fcircle(16, 16, 16 - j);
+    fcircle(104, 16, 16 - j);
+    fcircle(16, 144, 16 - j);
+    fcircle(104, 144, 16 - j);
+
+    hline(16, j, 88);
+    hline(16, 160 - j, 88);
+    vline(j, 16, 128);
+    vline(120 - j, 16, 128);
+  }
+
+  pen(11, 12, 15);
+  frect(9, 16, 103, 128);
+  frect(16, 9, 88, 143);
+
+  for (char i = 0; i < num_games; i++)
+  {
+    target(games_available[i].card);
+
+    pen(15, 15, 15);
+    text(games_available[i].title, 40 - (((float)strlen(games_available[i].title) / 2) * 8), 60);
+  }
+
+  target();
+}
+
 void init()
 {
   splash();
@@ -90,10 +132,18 @@ void init()
 
   pen(2, 8, 2);
   clear();
+
+  init_games();
+
+  blit(card, 0, 0, 120, 160, 60, 40, 120, 160);
+  blit(games_available[0].card, 0, 0, 60, 80, 60, 40, 120, 160);
 }
 
 void update(uint32_t tick)
 {
+  battery_level = battery();
+  led(100 - battery_level, battery_level, 0);
+
   switch (game_chosen)
   {
   case games::TETRIS:
