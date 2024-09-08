@@ -120,6 +120,8 @@ void init_games()
   {
     target(games_available[i].card);
 
+    pen(0, 0, 0);
+    text(games_available[i].title, 41 - (((float)strlen(games_available[i].title) / 2) * 8), 61);
     pen(15, 15, 15);
     text(games_available[i].title, 40 - (((float)strlen(games_available[i].title) / 2) * 8), 60);
   }
