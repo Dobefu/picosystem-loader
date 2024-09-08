@@ -127,24 +127,24 @@ void init_games()
   target();
 }
 
-void draw_card(game_t game, int8_t x, int8_t y)
+void draw_card(game_t game, int8_t x, int8_t y, float scale)
 {
   // Corners.
-  blit(card, 0, 0, 16, 16, 60 + x, 40, 16, 16);
-  blit(card, 32, 0, 16, 16, 164 + x, 40, 16, 16);
-  blit(card, 0, 32, 16, 16, 60 + x, 184, 16, 16);
-  blit(card, 32, 32, 16, 16, 164 + x, 184, 16, 16);
+  blit(card, 0, 0, 16, 16, (60 + x) * scale, (40 + y) * scale, 16 * scale, 16 * scale);
+  blit(card, 32, 0, 16, 16, (164 + x) * scale, (40 + y) * scale, 16 * scale, 16 * scale);
+  blit(card, 0, 32, 16, 16, (60 + x) * scale, (184 + y) * scale, 16 * scale, 16 * scale);
+  blit(card, 32, 32, 16, 16, (164 + x) * scale, (184 + y) * scale, 16 * scale, 16 * scale);
 
   // Sides.
-  blit(card, 16, 0, 16, 16, 76 + x, 40, 88, 16);
-  blit(card, 16, 32, 16, 16, 76 + x, 184, 88, 16);
-  blit(card, 0, 16, 16, 16, 60 + x, 56, 16, 128);
-  blit(card, 32, 16, 16, 16, 164 + x, 56, 16, 128);
+  blit(card, 16, 0, 16, 16, (76 + x) * scale, (40 + y) * scale, 88 * scale, 16 * scale);
+  blit(card, 16, 32, 16, 16, (76 + x) * scale, (184 + y) * scale, 88 * scale, 16 * scale);
+  blit(card, 0, 16, 16, 16, (60 + x) * scale, (56 + y) * scale, 16 * scale, 128 * scale);
+  blit(card, 32, 16, 16, 16, (164 + x) * scale, (56 + y) * scale, 16 * scale, 128 * scale);
 
   // Center.
-  blit(card, 16, 16, 16, 16, 76 + x, 56, 88, 128);
+  blit(card, 16, 16, 16, 16, (76 + x) * scale, (56 + y) * scale, 88 * scale, 128 * scale);
 
-  blit(game.card, 0, 0, 60, 80, 60 + x, 40, 120, 160);
+  blit(game.card, 0, 0, 60, 80, (60 + x) * scale, (40 + y) * scale, 120 * scale, 160 * scale);
 }
 
 void init()
@@ -212,7 +212,7 @@ void draw(uint32_t tick)
   pen(2, 8, 2);
   clear();
 
-  draw_card(games_available[(char)(game_selected - 1) > num_games - 1 ? num_games - 1 : game_selected - 1], -48, 0);
-  draw_card(games_available[(char)(game_selected + 1) > num_games - 1 ? 0 : game_selected + 1], 48, 0);
-  draw_card(games_available[game_selected], 0, 0);
+  draw_card(games_available[(char)(game_selected - 1) > num_games - 1 ? num_games - 1 : game_selected - 1], -48, 40, .75);
+  draw_card(games_available[(char)(game_selected + 1) > num_games - 1 ? 0 : game_selected + 1], 124, 40, .75);
+  draw_card(games_available[game_selected], 0, 0, 1);
 }
