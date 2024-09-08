@@ -21,6 +21,7 @@ uint8_t volume = 100;
 
 states state = states::SPLASH;
 games game_chosen = games::NONE;
+char game_selected = 0;
 
 void init_logo(buffer_t *logo)
 {
@@ -100,19 +101,19 @@ void init_games()
     }
 
     fcircle(16, 16, 16 - j);
-    fcircle(104, 16, 16 - j);
-    fcircle(16, 144, 16 - j);
-    fcircle(104, 144, 16 - j);
+    fcircle(31, 16, 16 - j);
+    fcircle(16, 31, 16 - j);
+    fcircle(31, 31, 16 - j);
 
-    hline(16, j, 88);
-    hline(16, 160 - j, 88);
-    vline(j, 16, 128);
-    vline(120 - j, 16, 128);
+    hline(16, j, 16);
+    hline(16, 47 - j, 16);
+    vline(j, 16, 16);
+    vline(47 - j, 16, 16);
   }
 
   pen(11, 12, 15);
-  frect(9, 16, 103, 128);
-  frect(16, 9, 88, 143);
+  frect(9, 16, 30, 16);
+  frect(16, 9, 16, 30);
 
   for (char i = 0; i < num_games; i++)
   {
@@ -125,24 +126,43 @@ void init_games()
   target();
 }
 
+void draw_card(game_t game)
+{
+  // Corners.
+  blit(card, 0, 0, 16, 16, 60, 40, 16, 16);
+  blit(card, 32, 0, 16, 16, 164, 40, 16, 16);
+  blit(card, 0, 32, 16, 16, 60, 184, 16, 16);
+  blit(card, 32, 32, 16, 16, 164, 184, 16, 16);
+
+  // Sides.
+  blit(card, 16, 0, 16, 16, 76, 40, 88, 16);
+  blit(card, 16, 32, 16, 16, 76, 184, 88, 16);
+  blit(card, 0, 16, 16, 16, 60, 56, 16, 128);
+  blit(card, 32, 16, 16, 16, 164, 56, 16, 128);
+
+  // Center.
+  blit(card, 16, 16, 16, 16, 76, 56, 88, 128);
+
+  blit(game.card, 0, 0, 60, 80, 60, 40, 120, 160);
+}
+
 void init()
 {
-  splash();
-  sleep(1000);
-
-  pen(2, 8, 2);
-  clear();
+  // splash();
+  // sleep(1000);
 
   init_games();
-
-  blit(card, 0, 0, 120, 160, 60, 40, 120, 160);
-  blit(games_available[0].card, 0, 0, 60, 80, 60, 40, 120, 160);
 }
 
 void update(uint32_t tick)
 {
   battery_level = battery();
   led(100 - battery_level, battery_level, 0);
+
+  if (game_chosen == games::NONE)
+  {
+    return;
+  }
 
   switch (game_chosen)
   {
@@ -160,6 +180,16 @@ void update(uint32_t tick)
 
 void draw(uint32_t tick)
 {
+  if (game_chosen == games::NONE)
+  {
+    pen(2, 8, 2);
+    clear();
+
+    draw_card(games_available[game_selected]);
+
+    return;
+  }
+
   switch (game_chosen)
   {
   case games::TETRIS:

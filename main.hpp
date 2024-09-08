@@ -24,7 +24,7 @@ struct game_t
   buffer_t *card = buffer(60, 80);
 };
 
-buffer_t *card = buffer(120, 160);
+buffer_t *card = buffer(48, 48);
 
 const char num_games = 6;
 game_t games_available[num_games] = {
