@@ -26,31 +26,11 @@ struct game_t
 
 buffer_t *card = buffer(48, 48);
 
-const char num_games = 6;
+const char num_games = 1;
 game_t games_available[num_games] = {
     {
         games::TETRIS,
         "Tetris",
-    },
-    {
-        games::TETRIS,
-        "Tetris 2",
-    },
-    {
-        games::TETRIS,
-        "Tetris 3",
-    },
-    {
-        games::TETRIS,
-        "Tetris 4",
-    },
-    {
-        games::TETRIS,
-        "Tetris 5",
-    },
-    {
-        games::TETRIS,
-        "Tetris 6",
     },
 };
 

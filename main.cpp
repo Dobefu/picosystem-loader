@@ -126,24 +126,24 @@ void init_games()
   target();
 }
 
-void draw_card(game_t game)
+void draw_card(game_t game, int8_t x, int8_t y)
 {
   // Corners.
-  blit(card, 0, 0, 16, 16, 60, 40, 16, 16);
-  blit(card, 32, 0, 16, 16, 164, 40, 16, 16);
-  blit(card, 0, 32, 16, 16, 60, 184, 16, 16);
-  blit(card, 32, 32, 16, 16, 164, 184, 16, 16);
+  blit(card, 0, 0, 16, 16, 60 + x, 40, 16, 16);
+  blit(card, 32, 0, 16, 16, 164 + x, 40, 16, 16);
+  blit(card, 0, 32, 16, 16, 60 + x, 184, 16, 16);
+  blit(card, 32, 32, 16, 16, 164 + x, 184, 16, 16);
 
   // Sides.
-  blit(card, 16, 0, 16, 16, 76, 40, 88, 16);
-  blit(card, 16, 32, 16, 16, 76, 184, 88, 16);
-  blit(card, 0, 16, 16, 16, 60, 56, 16, 128);
-  blit(card, 32, 16, 16, 16, 164, 56, 16, 128);
+  blit(card, 16, 0, 16, 16, 76 + x, 40, 88, 16);
+  blit(card, 16, 32, 16, 16, 76 + x, 184, 88, 16);
+  blit(card, 0, 16, 16, 16, 60 + x, 56, 16, 128);
+  blit(card, 32, 16, 16, 16, 164 + x, 56, 16, 128);
 
   // Center.
-  blit(card, 16, 16, 16, 16, 76, 56, 88, 128);
+  blit(card, 16, 16, 16, 16, 76 + x, 56, 88, 128);
 
-  blit(game.card, 0, 0, 60, 80, 60, 40, 120, 160);
+  blit(game.card, 0, 0, 60, 80, 60 + x, 40, 120, 160);
 }
 
 void init()
@@ -159,11 +159,6 @@ void update(uint32_t tick)
   battery_level = battery();
   led(100 - battery_level, battery_level, 0);
 
-  if (game_chosen == games::NONE)
-  {
-    return;
-  }
-
   switch (game_chosen)
   {
   case games::TETRIS:
@@ -171,29 +166,52 @@ void update(uint32_t tick)
     return;
   }
 
+  if (pressed(LEFT) || pressed(UP))
+  {
+    game_selected--;
+
+    if (game_selected > num_games - 1)
+    {
+      game_selected = num_games - 1;
+    }
+  }
+
+  if (pressed(RIGHT) || pressed(DOWN))
+  {
+    game_selected++;
+
+    if (game_selected > num_games - 1)
+    {
+      game_selected = 0;
+    }
+  }
+
   if (pressed(A))
   {
-    game_chosen = games::TETRIS;
-    Tetris::init();
+    game_chosen = games_available[game_selected].id;
+
+    switch (game_chosen)
+    {
+    case games::TETRIS:
+      Tetris::init();
+      return;
+    }
   }
 }
 
 void draw(uint32_t tick)
 {
-  if (game_chosen == games::NONE)
-  {
-    pen(2, 8, 2);
-    clear();
-
-    draw_card(games_available[game_selected]);
-
-    return;
-  }
-
   switch (game_chosen)
   {
   case games::TETRIS:
     Tetris::draw(tick);
     return;
   }
+
+  pen(2, 8, 2);
+  clear();
+
+  draw_card(games_available[(char)(game_selected - 1) > num_games - 1 ? num_games - 1 : game_selected - 1], -48, 0);
+  draw_card(games_available[(char)(game_selected + 1) > num_games - 1 ? 0 : game_selected + 1], 48, 0);
+  draw_card(games_available[game_selected], 0, 0);
 }
