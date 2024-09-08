@@ -214,6 +214,17 @@ void draw(uint32_t tick)
   pen(2, 8, 2);
   clear();
 
+  buffer_t *select_text = buffer(78, 8);
+  target(select_text);
+
+  pen(0, 0, 0);
+  text("SELECT A GAME", 1, 1);
+  pen(15, 15, 15);
+  text("SELECT A GAME", 0, 0);
+
+  target();
+  blit(select_text, 0, 0, 78, 8, 42, 16, 156, 16);
+
   draw_card(games_available[(char)(game_selected - 1) > num_games - 1 ? num_games - 1 : game_selected - 1], -48, 40, .75);
   draw_card(games_available[(char)(game_selected + 1) > num_games - 1 ? 0 : game_selected + 1], 124, 40, .75);
   draw_card(games_available[game_selected], 0, 0, 1);
