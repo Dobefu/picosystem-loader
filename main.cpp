@@ -16,20 +16,18 @@ namespace Tetris
 
 uint8_t volume = 100;
 
-buffer_t *logo = buffer(82, 50);
-
 states state = states::SPLASH;
 games game_chosen = games::NONE;
 
-void init_logo()
+void init_logo(buffer_t *logo)
 {
   target(logo);
 
   const uint8_t *s = _picosystem_logo;
 
-  for (uint8_t y = 0; y < 50; y++)
+  for (char y = 0; y < 50; y++)
   {
-    for (uint8_t x = 0; x < 82; x += 8)
+    for (char x = 0; x < 82; x += 8)
     {
       for (char bit = 0; bit < 8; bit++)
       {
@@ -57,7 +55,8 @@ void splash()
   pen(0, 0, 0);
   clear();
 
-  init_logo();
+  buffer_t *logo = buffer(82, 50);
+  init_logo(logo);
 
   for (char i = 0; i < 145; i++)
   {
@@ -70,7 +69,6 @@ void splash()
 
     blit(logo, 0, 0, 82, 50, 79, -50 + i, 82, 50);
 
-    // _wait_vsync();
     _flip();
 
     sleep(15);
@@ -81,6 +79,8 @@ void splash()
   play(voice_startup, 4000, 40, volume);
   sleep(100);
   play(voice_startup, 3000, 40, volume);
+
+  free(logo);
 }
 
 void init()
