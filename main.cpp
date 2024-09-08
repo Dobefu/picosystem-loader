@@ -90,10 +90,11 @@ void splash()
 void init_games()
 {
   target(card);
+  blend(COPY);
 
   for (char j = 0; j <= 8; j++)
   {
-    pen(2 + j, 8, 2 + j);
+    pen(0, 0, 0, j);
 
     if (j == 8)
     {
