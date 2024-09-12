@@ -151,8 +151,8 @@ void draw_card(game_t game, int8_t x, int8_t y, float scale)
 
 void init()
 {
-  // splash();
-  // sleep(1000);
+  splash();
+  sleep(1000);
 
   init_games();
 }
